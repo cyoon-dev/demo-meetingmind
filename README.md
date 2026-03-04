@@ -83,3 +83,32 @@ LOG_LEVEL=info
 cd server
 npm test
 ```
+
+## 트러블슈팅
+
+### Expo 실행 시 `expo-asset` not found 에러
+
+에러 예시:
+
+```
+Error: The required package `expo-asset` cannot be found
+```
+
+원인: Expo SDK 52 환경에서 Metro 설정이 `expo-asset`을 직접 require 하는데, 로컬 `node_modules`에 패키지가 누락된 경우 발생할 수 있습니다.
+
+해결 순서:
+
+```bash
+cd mobile
+npm install
+# 그래도 동일하면 클린 재설치
+npm run clean
+npm install
+# 필수 Expo 패키지 자동 복구(수동 실행 가능)
+npm run doctor
+npx expo start -c
+```
+
+`npm run start` 실행 전 `prestart`에서 자동 점검도 수행합니다.
+
+추가로 `mobile/package.json`에 `expo-asset`을 명시해 누락 가능성을 줄였습니다.
